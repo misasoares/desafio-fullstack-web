@@ -14,8 +14,22 @@ export const authFormShema = z
     nickname: z.string().optional(),
     email: z
       .string({ message: "É necessário adicionar um email." })
-      .email({ message: "É necessário adicionar um email." }),
-    password: z.string(),
+      .email({ message: "É necessário adicionar um email válido." }),
+    password: z
+      .string()
+      .min(4, {
+        message:
+          "É necessário adicionar uma senha com pelo menos 4 caracteres.",
+      })
+      .max(20, { message: "Excedeu o limite de caracteres." })
+      .refine(
+        (val) =>
+          /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/.test(val),
+        {
+          message:
+            "A senha deve conter pelo menos um número, uma letra maiúscula, e uma letra minúscula.",
+        }
+      ),
     repassword: z.string().optional(),
   })
   .superRefine((value, ctx) => {

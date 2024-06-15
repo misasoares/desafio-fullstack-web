@@ -16,6 +16,7 @@ export function useAuthFormHooks({ type, toggleType }: IAuthFormProps) {
     handleSubmit,
     register,
     formState: { errors },
+    reset,
   } = useForm({
     defaultValues,
     resolver: zodResolver(authFormShema),
@@ -29,6 +30,7 @@ export function useAuthFormHooks({ type, toggleType }: IAuthFormProps) {
       });
 
       if (response.success) {
+        reset();
         toggleType("login");
       }
       return;
