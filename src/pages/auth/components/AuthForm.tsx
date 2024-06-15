@@ -1,21 +1,7 @@
 import { Button, TextField, Typography } from "@mui/material";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { z } from "zod";
-
+import { useAuthFormHooks } from "../hooks/useAuthForm";
 import "../styles/glassmorphism.css";
-
-interface IAuthFormProps {
-  type: "login" | "register";
-}
-
-const defaultValues = {
-  name: "",
-  nickname: "",
-  email: "",
-  password: "",
-  repassword: "",
-};
+import { IAuthFormProps } from "../types/auth-form.";
 
 // const authFormShema = z.object({
 //   name: z.string().optional(),
@@ -24,22 +10,11 @@ const defaultValues = {
 //   password: z.string(),
 // });
 
-export default function AuthForm({ type }: IAuthFormProps) {
-  const { handleSubmit, register } = useForm({
-    defaultValues,
+export default function AuthForm({ type, toggleType }: IAuthFormProps) {
+  const { handleSubmit, register, handleAuthSubmit } = useAuthFormHooks({
+    type,
+    toggleType,
   });
-
-  async function handleAuthSubmit(data) {
-    const apiService = axios.create({
-      baseURL: "http://localhost:3000/",
-    });
-
-    const res = await apiService.post("users", {
-      ...data,
-      repassword: undefined,
-    });
-    console.log(res);
-  }
 
   return (
     <form
