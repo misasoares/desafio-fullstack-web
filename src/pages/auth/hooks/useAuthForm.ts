@@ -1,16 +1,14 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { httpClient } from "../../../shared/services/http-client/api";
 import "../styles/glassmorphism.css";
 import { IAuthFormProps } from "../types/auth-form.";
-
-const defaultValues = {
-  name: "",
-  nickname: "",
-  email: "",
-  password: "",
-  repassword: "",
-};
+import {
+  TCreateAuthForm,
+  authFormShema,
+  defaultValues,
+} from "../validations/auth-form.schema";
 
 export function useAuthFormHooks({ type, toggleType }: IAuthFormProps) {
   const navigate = useNavigate();
@@ -20,9 +18,10 @@ export function useAuthFormHooks({ type, toggleType }: IAuthFormProps) {
     formState: { errors },
   } = useForm({
     defaultValues,
+    resolver: zodResolver(authFormShema),
   });
 
-  async function handleAuthSubmit(data) {
+  async function handleAuthSubmit(data: TCreateAuthForm) {
     if (type === "register") {
       const response = await httpClient.doPost("users", {
         ...data,
@@ -51,5 +50,5 @@ export function useAuthFormHooks({ type, toggleType }: IAuthFormProps) {
     }
   }
 
-  return { handleSubmit, register, handleAuthSubmit };
+  return { handleSubmit, register, handleAuthSubmit, errors };
 }
