@@ -16,6 +16,7 @@ export const authFormShema = z
       .string({ message: "É necessário adicionar um email." })
       .email({ message: "É necessário adicionar um email." }),
     password: z.string(),
+    repassword: z.string().optional(),
   })
   .superRefine((value, ctx) => {
     if (value.name && !value.nickname) {
@@ -36,6 +37,13 @@ export const authFormShema = z
       ctx.addIssue({
         path: ["password"],
         message: "É necessário adicionar uma senha.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+    if (value.name && value.password && value.password !== value.repassword) {
+      ctx.addIssue({
+        path: ["repassword"],
+        message: "É necessário que as senhas sejam iguais.",
         code: z.ZodIssueCode.custom,
       });
     }

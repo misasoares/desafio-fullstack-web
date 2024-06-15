@@ -17,12 +17,12 @@ export default function AuthForm({ type, toggleType }: IAuthFormProps) {
       className="border-white border-2 w-2/6 rounded-md flex flex-col gap-5 p-10 justify-center items-center glass-fx"
     >
       <Typography
-        className=" text-yellow-500"
+        className=" text-pink-600"
         fontWeight="bold"
         variant="h4"
         component="h1"
       >
-        {type === "login" ? "Entrar" : "Registrar"}
+        {type === "login" ? "Login" : "Registrar"}
       </Typography>
       {type === "register" && (
         <>
@@ -68,6 +68,8 @@ export default function AuthForm({ type, toggleType }: IAuthFormProps) {
           variant="standard"
           type="password"
           fullWidth
+          error={!!errors.repassword}
+          helperText={errors.repassword?.message}
         />
       )}
       {type === "register" && (
@@ -78,7 +80,7 @@ export default function AuthForm({ type, toggleType }: IAuthFormProps) {
               className="cursor-pointer  text-yellow-500"
               onClick={() => toggleType("login")}
             >
-              Entrar
+              Login
             </u>
           </span>
         </Typography>
@@ -91,13 +93,13 @@ export default function AuthForm({ type, toggleType }: IAuthFormProps) {
               className="cursor-pointer text-yellow-500"
               onClick={() => toggleType("register")}
             >
-              Regristre-se
+              Registre-se
             </u>
           </span>
         </Typography>
       )}
       <Button type="submit" variant="contained">
-        Registrar-se
+        {type === "login" ? "Entrar" : "Registrar"}
       </Button>
     </form>
   );
