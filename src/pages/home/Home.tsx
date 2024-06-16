@@ -13,9 +13,6 @@ export default function Home() {
   const [menu, setMenu] = useState("emblems");
 
   function handleChangeMenu(menu: string) {
-    //vai definir em um estado qual menu será renderizado
-    //no componente abaixo
-
     setMenu(menu);
   }
 
