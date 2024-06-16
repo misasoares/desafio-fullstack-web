@@ -34,7 +34,7 @@ export default function MyEmblems() {
           <Button onClick={getEmblemToUser} variant="contained">
             {haveAllEmblems
               ? "Você já possui todos emblemas"
-              : "Resgatar um novo emblema"}
+              : "Resgatar um emblema aleatório"}
           </Button>
         </Grid>
       </Grid>
