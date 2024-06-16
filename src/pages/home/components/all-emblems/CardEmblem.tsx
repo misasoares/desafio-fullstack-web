@@ -1,7 +1,4 @@
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
 import { IEmblems } from "../../store/types";
 
 interface PropsEmblem {
@@ -9,22 +6,22 @@ interface PropsEmblem {
 }
 
 export default function CardEmblem({ emblem }: PropsEmblem) {
-  console.log(emblem);
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        image={emblem.image}
-        title={emblem.name}
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {emblem.name}
-        </Typography>
-        {/* <Typography variant="body2" color="text.secondary">
-          {emblem.slug}
-        </Typography> */}
-      </CardContent>
-    </Card>
+    <>
+      <Card
+        sx={{
+          width: 345,
+          height: 310,
+          backgroundColor: "black",
+          border: "1px solid white",
+        }}
+        className="bg-black p-6"
+      >
+        <div
+          className="bg-contain bg-no-repeat bg-center w-full h-full "
+          style={{ backgroundImage: `url(${emblem.image})` }}
+        />
+      </Card>
+    </>
   );
 }
