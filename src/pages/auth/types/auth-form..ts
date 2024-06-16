@@ -6,7 +6,9 @@ export interface IAuthFormProps {
 export type TTypeForm = "login" | "register";
 
 export interface LoginResponse {
+  email: string;
   access_token: string;
   id: string;
   name: string;
+  emblems: any[];
 }

@@ -11,6 +11,7 @@ import {
 } from "../validations/auth-form.schema";
 import { useAppDispatch } from "../../../store/hooks";
 import { showMessage } from "../../../shared/utils/custom-message/slice";
+import { setUser } from "../store/userSlice";
 
 export function useAuthFormHooks({ type, toggleType }: IAuthFormProps) {
   const navigate = useNavigate();
@@ -58,6 +59,16 @@ export function useAuthFormHooks({ type, toggleType }: IAuthFormProps) {
 
       if (response.success) {
         localStorage.setItem("access_token", response.data.access_token);
+
+        const { data } = response;
+
+        const user = {
+          id: data.id,
+          email: data.email,
+          name: data.name,
+          emblems: data.emblems,
+        };
+        dispatch(setUser(user));
 
         navigate("/");
         dispatch(

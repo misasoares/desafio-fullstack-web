@@ -4,12 +4,13 @@ import DefaultLayout from "./components/DefaultLayout";
 import { useAppDispatch } from "../../store/hooks";
 import { getAllEmblems } from "./store/emblemsSlice";
 import AllEmblems from "./components/all-emblems/AllEmblems";
+import MyEmblems from "./components/my-emblems/MyEmblems";
 
 export default function Home() {
   const { isTokenValid } = useValidateLogin();
   const dispatch = useAppDispatch();
 
-  const [menu, setMenu] = useState("dashboard");
+  const [menu, setMenu] = useState("emblems");
 
   function handleChangeMenu(menu: string) {
     //vai definir em um estado qual menu será renderizado
@@ -28,6 +29,7 @@ export default function Home() {
 
   return (
     <DefaultLayout handleChangeMenu={handleChangeMenu}>
+      {menu === "emblems" && <MyEmblems />}
       {menu === "all-emblems" && <AllEmblems />}
     </DefaultLayout>
   );
