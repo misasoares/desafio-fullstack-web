@@ -1,8 +1,37 @@
+import { useState, useRef, useEffect } from "react";
+
 interface PropsDefaultLayout {
   children: React.ReactNode;
+  handleChangeMenu: (menu: string) => void;
 }
 
-export default function DefaultLayout({ children }: PropsDefaultLayout) {
+export default function DefaultLayout({
+  children,
+  handleChangeMenu,
+}: PropsDefaultLayout) {
+  const [selectedMenu, setSelectedMenu] = useState("dashboard");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [menuHeight, setMenuHeight] = useState<string | number>("0px");
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const handleMenuClick = (menu: string) => {
+    setSelectedMenu(menu);
+    handleChangeMenu(menu);
+    setIsMobileMenuOpen(false);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  useEffect(() => {
+    if (menuRef.current) {
+      setMenuHeight(
+        isMobileMenuOpen ? `${menuRef.current.scrollHeight}px` : "0px"
+      );
+    }
+  }, [isMobileMenuOpen]);
+
   return (
     <>
       <nav className="bg-gray-800">
@@ -13,22 +42,22 @@ export default function DefaultLayout({ children }: PropsDefaultLayout) {
                 type="button"
                 className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                 aria-controls="mobile-menu"
-                aria-expanded="false"
+                aria-expanded={isMobileMenuOpen ? "true" : "false"}
+                onClick={toggleMobileMenu}
               >
                 <span className="absolute -inset-0.5"></span>
                 <span className="sr-only">Open main menu</span>
-
                 <svg
                   className="block h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
+                  strokeWidth="1.5"
                   stroke="currentColor"
                   aria-hidden="true"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
                   />
                 </svg>
@@ -38,31 +67,46 @@ export default function DefaultLayout({ children }: PropsDefaultLayout) {
               <div className="flex flex-shrink-0 items-center"></div>
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-4">
-                  <a
-                    href="#"
-                    className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
-                    aria-current="page"
+                  <p
+                    onClick={() => handleMenuClick("dashboard")}
+                    className={`cursor-pointer rounded-md px-3 py-2 text-sm font-medium ${
+                      selectedMenu === "dashboard"
+                        ? "bg-gray-900 text-white"
+                        : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                    }`}
                   >
                     Dashboard
-                  </a>
-                  <a
-                    href="#"
-                    className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                  </p>
+                  <p
+                    onClick={() => handleMenuClick("team")}
+                    className={`cursor-pointer rounded-md px-3 py-2 text-sm font-medium ${
+                      selectedMenu === "team"
+                        ? "bg-gray-900 text-white"
+                        : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                    }`}
                   >
                     Team
-                  </a>
-                  <a
-                    href="#"
-                    className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                  </p>
+                  <p
+                    onClick={() => handleMenuClick("projects")}
+                    className={`cursor-pointer rounded-md px-3 py-2 text-sm font-medium ${
+                      selectedMenu === "projects"
+                        ? "bg-gray-900 text-white"
+                        : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                    }`}
                   >
                     Projects
-                  </a>
-                  <a
-                    href="#"
-                    className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                  </p>
+                  <p
+                    onClick={() => handleMenuClick("calendar")}
+                    className={`cursor-pointer rounded-md px-3 py-2 text-sm font-medium ${
+                      selectedMenu === "calendar"
+                        ? "bg-gray-900 text-white"
+                        : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                    }`}
                   >
                     Calendar
-                  </a>
+                  </p>
                 </div>
               </div>
             </div>
@@ -90,33 +134,54 @@ export default function DefaultLayout({ children }: PropsDefaultLayout) {
           </div>
         </div>
 
-        <div className="sm:hidden" id="mobile-menu">
+        <div
+          className={`sm:hidden transition-height duration-300 ease-in-out overflow-hidden`}
+          id="mobile-menu"
+          style={{ height: menuHeight }}
+          ref={menuRef}
+        >
           <div className="space-y-1 px-2 pb-3 pt-2">
-            <a
-              href="#"
-              className="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white"
-              aria-current="page"
+            <p
+              onClick={() => handleMenuClick("dashboard")}
+              className={`block cursor-pointer rounded-md px-3 py-2 text-base font-medium ${
+                selectedMenu === "dashboard"
+                  ? "bg-gray-900 text-white"
+                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
+              }`}
+              aria-current={selectedMenu === "dashboard" ? "page" : undefined}
             >
               Dashboard
-            </a>
-            <a
-              href="#"
-              className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+            </p>
+            <p
+              onClick={() => handleMenuClick("team")}
+              className={`block cursor-pointer rounded-md px-3 py-2 text-base font-medium ${
+                selectedMenu === "team"
+                  ? "bg-gray-900 text-white"
+                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
+              }`}
             >
               Team
-            </a>
-            <a
-              href="#"
-              className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+            </p>
+            <p
+              onClick={() => handleMenuClick("projects")}
+              className={`block cursor-pointer rounded-md px-3 py-2 text-base font-medium ${
+                selectedMenu === "projects"
+                  ? "bg-gray-900 text-white"
+                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
+              }`}
             >
               Projects
-            </a>
-            <a
-              href="#"
-              className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+            </p>
+            <p
+              onClick={() => handleMenuClick("calendar")}
+              className={`block cursor-pointer rounded-md px-3 py-2 text-base font-medium ${
+                selectedMenu === "calendar"
+                  ? "bg-gray-900 text-white"
+                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
+              }`}
             >
               Calendar
-            </a>
+            </p>
           </div>
         </div>
       </nav>
