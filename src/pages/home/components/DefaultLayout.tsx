@@ -9,7 +9,7 @@ export default function DefaultLayout({
   children,
   handleChangeMenu,
 }: PropsDefaultLayout) {
-  const [selectedMenu, setSelectedMenu] = useState("dashboard");
+  const [selectedMenu, setSelectedMenu] = useState("emblems");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [menuHeight, setMenuHeight] = useState<string | number>("0px");
   const menuRef = useRef<HTMLDivElement>(null);
@@ -68,24 +68,24 @@ export default function DefaultLayout({
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-4">
                   <p
-                    onClick={() => handleMenuClick("dashboard")}
+                    onClick={() => handleMenuClick("emblems")}
                     className={`cursor-pointer rounded-md px-3 py-2 text-sm font-medium ${
-                      selectedMenu === "dashboard"
+                      selectedMenu === "emblems"
                         ? "bg-gray-900 text-white"
                         : "text-gray-300 hover:bg-gray-700 hover:text-white"
                     }`}
                   >
-                    Dashboard
+                    Meus emblemas
                   </p>
                   <p
-                    onClick={() => handleMenuClick("team")}
+                    onClick={() => handleMenuClick("all-emblems")}
                     className={`cursor-pointer rounded-md px-3 py-2 text-sm font-medium ${
-                      selectedMenu === "team"
+                      selectedMenu === "all-emblems"
                         ? "bg-gray-900 text-white"
                         : "text-gray-300 hover:bg-gray-700 hover:text-white"
                     }`}
                   >
-                    Team
+                    Todos emblemas
                   </p>
                   <p
                     onClick={() => handleMenuClick("projects")}
@@ -142,15 +142,15 @@ export default function DefaultLayout({
         >
           <div className="space-y-1 px-2 pb-3 pt-2">
             <p
-              onClick={() => handleMenuClick("dashboard")}
+              onClick={() => handleMenuClick("emblems")}
               className={`block cursor-pointer rounded-md px-3 py-2 text-base font-medium ${
-                selectedMenu === "dashboard"
+                selectedMenu === "emblems"
                   ? "bg-gray-900 text-white"
                   : "text-gray-300 hover:bg-gray-700 hover:text-white"
               }`}
-              aria-current={selectedMenu === "dashboard" ? "page" : undefined}
+              aria-current={selectedMenu === "emblems" ? "page" : undefined}
             >
-              Dashboard
+              Meus emblemas
             </p>
             <p
               onClick={() => handleMenuClick("team")}
@@ -185,7 +185,7 @@ export default function DefaultLayout({
           </div>
         </div>
       </nav>
-      {children}
+      <div className="p-10">{children}</div>
     </>
   );
 }
