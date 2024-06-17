@@ -1,30 +1,35 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+#Descrição
+Este é o repositório do desafio fullstack, na parte do front-end, desenvolvida em React utilizando Vite.
 
-Currently, two official plugins are available:
+#Como Executar
+Instale as dependências utilizando o comando: npm install
+Rode o servidor com: npm run dev
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+#Estrutura de Pastas
+A aplicação segue uma estrutura organizada de pastas para melhor modularização e manutenção do código. Abaixo está a descrição das pastas principais:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+pages: Contém todas as páginas da aplicação. Cada página tem sua própria pasta, como auth e home. Dentro de cada pasta de página, existem as seguintes subpastas:
 
-- Configure the top-level `parserOptions` property like this:
+components: Armazena todos os componentes utilizados exclusivamente naquela página.
+hooks: Contém lógicas customizadas reutilizáveis utilizadas especificamente naquela página.
+store: Armazena os slices do Redux específicos daquela página, se houver.
+styles: Contém arquivos de estilos CSS específicos daquela página.
+types: Armazena arquivos de tipagem específicos daquela página.
+validations: Contém as validações de formulários específicas daquela página.
+routes: Responsável pelo roteamento das páginas da aplicação.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+shared: Esta pasta contém recursos compartilhados em toda a aplicação:
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+services: Configura as chamadas à API e fornece funções de serviço compartilhadas.
+utils: Contém funções e métodos utilitários globais que podem ser usados em diferentes partes da aplicação.
+store: Configura o Redux global da aplicação, incluindo a configuração do store, reducers e middlewares globais, se houver.
+
+Essa estrutura de pastas foi projetada para facilitar o desenvolvimento, manutenção e escalabilidade da aplicação, promovendo a reutilização de código e uma separação clara de responsabilidades entre os diferentes elementos da aplicação.
+
+
+
+
+
