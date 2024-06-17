@@ -1,4 +1,16 @@
-import { useState, useRef, useEffect } from "react";
+import {
+  Avatar,
+  IconButton,
+  Menu,
+  MenuItem,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { MouseEvent, useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { logout, selectUser } from "../../auth/store/userSlice";
+import { useNavigate } from "react-router-dom";
+import LosSantosBG from "../../../assets/los_santos.png";
 
 interface PropsDefaultLayout {
   children: React.ReactNode;
@@ -9,10 +21,17 @@ export default function DefaultLayout({
   children,
   handleChangeMenu,
 }: PropsDefaultLayout) {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const user = useAppSelector(selectUser);
+
   const [selectedMenu, setSelectedMenu] = useState("emblems");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [menuHeight, setMenuHeight] = useState<string | number>("0px");
   const menuRef = useRef<HTMLDivElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   const handleMenuClick = (menu: string) => {
     setSelectedMenu(menu);
@@ -24,6 +43,19 @@ export default function DefaultLayout({
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  function handleLogout() {
+    handleClose();
+    dispatch(logout());
+    navigate("/auth");
+  }
+
   useEffect(() => {
     if (menuRef.current) {
       setMenuHeight(
@@ -34,7 +66,7 @@ export default function DefaultLayout({
 
   return (
     <>
-      <nav className="bg-gray-800">
+      <nav className="bg-gray-800 ">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -87,47 +119,27 @@ export default function DefaultLayout({
                   >
                     Todos emblemas
                   </p>
-                  <p
-                    onClick={() => handleMenuClick("projects")}
-                    className={`cursor-pointer rounded-md px-3 py-2 text-sm font-medium ${
-                      selectedMenu === "projects"
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                    }`}
-                  >
-                    Projects
-                  </p>
-                  <p
-                    onClick={() => handleMenuClick("calendar")}
-                    className={`cursor-pointer rounded-md px-3 py-2 text-sm font-medium ${
-                      selectedMenu === "calendar"
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                    }`}
-                  >
-                    Calendar
-                  </p>
                 </div>
               </div>
             </div>
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
               <div className="relative ml-3">
-                <div>
-                  <button
-                    type="button"
-                    className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                    id="user-menu-button"
-                    aria-expanded="false"
-                    aria-haspopup="true"
-                  >
-                    <span className="absolute -inset-1.5"></span>
-                    <span className="sr-only">Open user menu</span>
-                    <img
-                      className="h-8 w-8 rounded-full"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      alt=""
-                    />
-                  </button>
+                <div className="flex items-center">
+                  <Typography fontWeight="bold" className="text-white">
+                    {user.name}
+                  </Typography>
+                  <Tooltip title="Account settings">
+                    <IconButton
+                      onClick={handleClick}
+                      size="small"
+                      sx={{ ml: 2 }}
+                      aria-controls={open ? "account-menu" : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={open ? "true" : undefined}
+                    >
+                      <Avatar sx={{ width: 32, height: 32 }}>C</Avatar>
+                    </IconButton>
+                  </Tooltip>
                 </div>
               </div>
             </div>
@@ -153,39 +165,65 @@ export default function DefaultLayout({
               Meus emblemas
             </p>
             <p
-              onClick={() => handleMenuClick("team")}
-              className={`block cursor-pointer rounded-md px-3 py-2 text-base font-medium ${
-                selectedMenu === "team"
+              onClick={() => handleMenuClick("all-emblems")}
+              className={`cursor-pointer rounded-md px-3 py-2 text-sm font-medium ${
+                selectedMenu === "all-emblems"
                   ? "bg-gray-900 text-white"
                   : "text-gray-300 hover:bg-gray-700 hover:text-white"
               }`}
             >
-              Team
-            </p>
-            <p
-              onClick={() => handleMenuClick("projects")}
-              className={`block cursor-pointer rounded-md px-3 py-2 text-base font-medium ${
-                selectedMenu === "projects"
-                  ? "bg-gray-900 text-white"
-                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
-              }`}
-            >
-              Projects
-            </p>
-            <p
-              onClick={() => handleMenuClick("calendar")}
-              className={`block cursor-pointer rounded-md px-3 py-2 text-base font-medium ${
-                selectedMenu === "calendar"
-                  ? "bg-gray-900 text-white"
-                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
-              }`}
-            >
-              Calendar
+              Todos emblemas
             </p>
           </div>
         </div>
       </nav>
-      <div className="p-10">{children}</div>
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: "visible",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            mt: 1.5,
+            "& .MuiAvatar-root": {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            "&::before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem onClick={handleClose}>Minha conta</MenuItem>
+
+        <MenuItem onClick={handleLogout}>Sair</MenuItem>
+      </Menu>
+
+      <div className="relative p-10 bg-black min-h-screen">
+        <div
+          className="  absolute inset-0 bg-cover bg-center  opacity-35"
+          style={{ backgroundImage: `url(${LosSantosBG})` }}
+        ></div>
+        <div className="relative z-10">{children}</div>
+      </div>
     </>
   );
 }
