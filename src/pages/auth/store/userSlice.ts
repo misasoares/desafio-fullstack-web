@@ -13,7 +13,9 @@ interface IUser {
 export const getRandomEmblemToUser = createAsyncThunk(
   "emblems/getRandomEmblem",
   async (userId: string) => {
-    const response = await httpClient.doGet(`users/getRandomEmblem/${userId}`);
+    const response = await httpClient.doGet(
+      `users/get-random-emblem/${userId}`
+    );
     if (response.success) {
       return response.data;
     }
@@ -41,6 +43,7 @@ const userSlice = createSlice({
       state.id = "";
       state.name = "";
       state.email = "";
+      localStorage.removeItem("access_token");
     },
   },
   extraReducers: (builder) =>
