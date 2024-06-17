@@ -14,6 +14,7 @@ export default function CardEmblem({ emblem }: PropsEmblem) {
           height: 310,
           backgroundColor: "black",
           border: "1px solid white",
+          boxShadow: "0 0 5px 1px orange",
         }}
         className="bg-black p-6"
       >
